@@ -42,7 +42,7 @@
             max-width: 1200px;
             margin: auto;
         }
-        .user-list, .add-user, .add-discipline, .send-message, .assign-discipline, .grades-table {
+        .user-list, .add-user, .add-discipline, .send-message, .assign-discipline, .grades-table, .discipline-list {
             background: #1f3344;
             padding: 20px;
             margin-top: 20px;
@@ -175,6 +175,41 @@
                 
                 <button type="submit">Cadastrar</button>
             </form>
+        </div>
+
+        <!-- Lista de Disciplinas -->
+        <div class="discipline-list">
+            <h2>Disciplinas Cadastradas</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome da Disciplina</th>
+                        <th>Professor</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for discipline in disciplines %}
+                    <tr>
+                        <td>{{ discipline.id }}</td>
+                        <td>{{ discipline.name }}</td>
+                        <td>
+                            {% for teacher in teachers %}
+                                {% if teacher.id == discipline.professor_id %}
+                                    {{ teacher.name }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <form action="{{ url_for('delete_discipline', discipline_id=discipline.id) }}" method="POST" style="display: inline;">
+                                <button type="submit" class="delete-button">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
 
         <!-- Cadastro de Disciplinas -->
