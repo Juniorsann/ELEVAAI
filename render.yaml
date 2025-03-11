@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: meu-projeto
+    runtime: python
+    repo: https://github.com/Juniorsann/ELEVAAI.git
+    branch: main
+    envVars:
+      - key: SECRET_KEY
+        value: minha_senha_secreta
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
+    region: oregon
+    plan: free
