@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #212429;
+            margin: 0;
+            padding: 0;
+            color: #b5b5bd;
+        }
+        header {
+            background-color: #1f3344;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        nav {
+            background-color: #175b75;
+            padding: 15px;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        nav a:hover {
+            background-color: #299da7;
+        }
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .user-list, .add-user, .add-discipline, .send-message, .assign-discipline, .grades-table {
+            background: #1f3344;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            color: #83c346;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: #212429;
+            color: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #299da7;
+        }
+        th {
+            background: #175b75;
+        }
+        tr:hover {
+            background: #175b75;
+        }
+        .add-user form, .add-discipline form, .send-message form, .assign-discipline form, .grades-table form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        .add-user input, .add-user select, .add-discipline input, .assign-discipline select, .grades-table input, .grades-table select {
+            margin: 5px 0;
+            padding: 12px;
+            font-size: 14px;
+            border: 1px solid #299da7;
+            border-radius: 5px;
+            background: #212429;
+            color: white;
+        }
+        .add-user button, .add-discipline button, .send-message button, .assign-discipline button, .grades-table button {
+            background-color: #83c346;
+            color: white;
+            padding: 12px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .add-user button:hover, .add-discipline button:hover, .send-message button:hover, .assign-discipline button:hover, .grades-table button:hover {
+            background-color: #299da7;
+        }
+        .delete-button {
+            background: none;
+            border: none;
+            color: #83c346;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0;
+            margin: 0;
+        }
+        .delete-button:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Painel Administrativo
+    </header>
+
+    <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('logout') }}">Sair</a>
+    </nav>
+
+    <div class="container">
+        <!-- Lista de Usuários -->
+        <div class="user-list">
+            <h2>Usuários Cadastrados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome de Usuário</th>
+                        <th>Função</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user['id'] }}</td>
+                        <td>{{ user['username'] }}</td>
+                        <td>{{ user['role'] }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_user', user_id=user['id']) }}" style="color: #299da7;">Editar</a> | 
+                            <form action="{{ url_for('delete_user', user_id=user['id']) }}" method="POST" style="display: inline;">
+                                <button type="submit" class="delete-button">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Cadastro de Novo Usuário -->
+        <div class="add-user">
+            <h2>Cadastrar Novo Usuário</h2>
+            <form method="POST">
+                <label for="username">Nome de Usuário</label>
+                <input type="text" id="username" name="username" required>
+                
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password" required>
+                
+                <label for="role">Função</label>
+                <select id="role" name="role" required>
+                    <option value="admin">Administrador</option>
+                    <option value="teacher">Professor</option>
+                    <option value="student">Aluno</option>
+                </select>
+                
+                <button type="submit">Cadastrar</button>
+            </form>
+        </div>
+
+        <!-- Cadastro de Disciplinas -->
+        <div class="add-discipline">
+            <h2>Cadastrar Disciplinas</h2>
+            <form method="POST">
+                <label for="disciplina">Nome da Disciplina</label>
+                <input type="text" id="disciplina" name="disciplina" required>
+                
+                <label for="professor">Professor</label>
+                <select id="professor" name="professor" required>
+                    {% for teacher in teachers %}
+                        <option value="{{ teacher.id }}">{{ teacher.name }}</option>
+                    {% endfor %}
+                </select>
+                
+                <button type="submit">Cadastrar Disciplina</button>
+            </form>
+        </div>
+
+        <!-- Atribuir Disciplina aos Alunos -->
+        <div class="assign-discipline">
+            <h2>Atribuir Disciplinas aos Alunos</h2>
+            <form method="POST">
+                <label for="aluno">Aluno</label>
+                <select id="aluno" name="aluno" required>
+                    {% for student in students %}
+                        <option value="{{ student.id }}">{{ student.name }}</option>
+                    {% endfor %}
+                </select>
+                
+                <label for="disciplina">Disciplina</label>
+                <select id="disciplina" name="disciplina" required>
+                    {% for discipline in disciplines %}
+                        <option value="{{ discipline.id }}">{{ discipline.name }}</option>
+                    {% endfor %}
+                </select>
+                
+                <button type="submit">Atribuir Disciplina</button>
+            </form>
+        </div>
+
+        <!-- Tabela de Notas e Frequência -->
+        <div class="grades-table">
+            <h2>Notas e Frequência dos Alunos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Aluno</th>
+                        {% for discipline in disciplines %}
+                            <th>{{ discipline.name }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <td>{{ student.name }}</td>
+                            {% for discipline in disciplines %}
+                                <td>
+                                    {% set grade_data = grades_dict.get((student.id, discipline.id)) %}
+                                    <form method="POST" style="display: inline;">
+                                        <input type="hidden" name="aluno" value="{{ student.id }}">
+                                        <input type="hidden" name="disciplina" value="{{ discipline.id }}">
+                                        <input type="text" name="nota" value="{{ grade_data.grade if grade_data else '' }}" placeholder="Nota" style="width: 50px;">
+                                        <input type="number" name="frequencia" value="{{ grade_data.frequency if grade_data else '' }}" placeholder="Freq." min="0" max="100" style="width: 50px;">
+                                        <button type="submit">Salvar</button>
+                                    </form>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Enviar Mensagem -->
+        <div class="send-message">
+            <h2>Enviar Mensagem aos Alunos</h2>
+            <form method="POST">
+                <label for="aluno">Aluno (opcional, deixe em branco para enviar a todos)</label>
+                <select id="aluno" name="aluno">
+                    <option value="">Todos os Alunos</option>
+                    {% for student in students %}
+                        <option value="{{ student.id }}">{{ student.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="assunto">Assunto</label>
+                <input type="text" id="assunto" name="assunto" required>
+                
+                <label for="mensagem">Mensagem</label>
+                <textarea id="mensagem" name="mensagem" rows="5" required></textarea>
+                
+                <button type="submit">Enviar Mensagem</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+

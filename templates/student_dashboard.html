@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Aluno</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #212429;
+            margin: 0;
+            padding: 0;
+            color: #b5b5bd;
+        }
+        header {
+            background-color: #1f3344;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        nav {
+            background-color: #175b75;
+            padding: 15px;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        nav a:hover {
+            background-color: #299da7;
+        }
+        .container {
+            padding: 20px;
+            max-width: 900px;
+            margin: auto;
+        }
+        .grades, .messages, .contents {
+            background: #1f3344;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            color: #83c346;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: #212429;
+            color: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #299da7;
+        }
+        th {
+            background: #175b75;
+        }
+        tr:hover {
+            background: #175b75;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            background: #212429;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #299da7;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Painel do Aluno
+    </header>
+
+    <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('logout') }}">Sair</a>
+    </nav>
+
+    <div class="container">
+        <!-- Notas e Frequência -->
+        <div class="grades">
+            <h2>Notas e Frequência</h2>
+            {% if grades %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Disciplina</th>
+                            <th>Nota</th>
+                            <th>Frequência (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for grade in grades %}
+                            <tr>
+                                <td>{{ grade['name'] }}</td>
+                                <td>{{ grade['grade'] }}</td>
+                                <td>{{ grade['frequency'] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Nenhuma nota ou frequência disponível.</p>
+            {% endif %}
+        </div>
+
+        <!-- Mensagens Recebidas -->
+        <div class="messages">
+            <h2>Mensagens Recebidas</h2>
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>
+                            <strong>{{ message['assunto'] }}</strong><br>
+                            {{ message['mensagem'] }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Nenhuma mensagem recebida.</p>
+            {% endif %}
+        </div>
+
+        <!-- Conteúdo das Disciplinas -->
+        <div class="contents">
+            <h2>Conteúdo das Disciplinas</h2>
+            {% if contents %}
+                <ul>
+                    {% for content in contents %}
+                        <li>
+                            <strong>{{ content['discipline_name'] }}</strong><br>
+                            {{ content['content'] }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Nenhum conteúdo disponível.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

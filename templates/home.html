@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Inicial</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Fundo com ondas e gradiente */
+        body {
+            background: linear-gradient(135deg, #1f3344 40%, #175b75 100%);
+            background-image: url('/static/imagens/waves.png');
+            background-repeat: no-repeat;
+            background-position: bottom center;
+            background-size: cover;
+            color: #fff;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* Container para centralizar e criar uma área de conteúdo */
+        .container {
+            background-color: rgba(0, 0, 0, 0.7); /* Fundo levemente transparente para dar contraste */
+            padding: 30px 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Logo */
+        .logo {
+            max-width: 250px;
+            margin-bottom: 20px;
+            animation: logoAnimation 1.5s ease-out;
+        }
+
+        /* Animação suave para a logo */
+        @keyframes logoAnimation {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Título */
+        h1 {
+            font-size: 2.5rem;
+            color: #83c346;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        /* Botão de login */
+        .login-btn {
+            background-color: #299da7;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .login-btn:hover {
+            background-color: #175b75;
+        }
+
+        /* Responsividade para telas menores */
+        @media (max-width: 768px) {
+            .logo {
+                max-width: 200px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .login-btn {
+                padding: 12px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo -->
+        <img src="{{ url_for('static', filename='imagens/eleva.gif') }}" alt="Logo" class="logo">
+
+        <!-- Título -->
+        <h1>Bem-vindo à nossa plataforma!</h1>
+
+        <!-- Botão de login -->
+        <a href="{{ url_for('login') }}" class="login-btn">Fazer Login</a>
+    </div>
+</body>
+</html>

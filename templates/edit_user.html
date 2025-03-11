@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usuário</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        input[type="text"], input[type="password"], select {
+            padding: 8px;
+            margin: 5px;
+            width: 100%;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Painel do Administrador</h1>
+        <nav>
+            <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('logout') }}">Sair</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Editar Usuário</h2>
+        <form action="{{ url_for('edit_user', user_id=user['id']) }}" method="POST">
+            <label for="username">Nome de Usuário:</label>
+            <input type="text" id="username" name="username" value="{{ user['username'] }}" required><br>
+
+            <label for="password">Nova Senha:</label>
+            <input type="password" id="password" name="password" placeholder="Deixe em branco para manter a senha atual"><br>
+
+            <label for="role">Função:</label>
+            <select id="role" name="role" required>
+                <option value="admin" {% if user['role'] == 'admin' %}selected{% endif %}>Administrador</option>
+                <option value="teacher" {% if user['role'] == 'teacher' %}selected{% endif %}>Professor</option>
+                <option value="student" {% if user['role'] == 'student' %}selected{% endif %}>Aluno</option>
+            </select><br>
+
+            <input type="submit" value="Salvar Alterações">
+        </form>
+    </div>
+</body>
+</html>
+
+
