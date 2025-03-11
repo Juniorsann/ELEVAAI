@@ -438,6 +438,31 @@ def delete_user(user_id):
     flash('Usuário excluído com sucesso!', 'success')
     return redirect(url_for('admin_dashboard'))
 
+# Rota para excluir disciplina
+@app.route('/delete_discipline/<int:discipline_id>', methods=['POST'])
+@login_required
+def delete_discipline(discipline_id):
+    if current_user.role != 'admin':  # Apenas administradores podem excluir disciplinas
+        return redirect(url_for('home'))
+
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+
+        # Verificar se a disciplina existe
+        cursor.execute("SELECT * FROM disciplines WHERE id = ?", (discipline_id,))
+        discipline = cursor.fetchone()
+
+        if not discipline:
+            flash('Disciplina não encontrada.', 'error')
+            return redirect(url_for('admin_dashboard'))
+
+        # Excluir a disciplina
+        cursor.execute("DELETE FROM disciplines WHERE id = ?", (discipline_id,))
+        conn.commit()
+
+    flash('Disciplina excluída com sucesso!', 'success')
+    return redirect(url_for('admin_dashboard'))
+
 # Função para configurar o banco de dados
 def setup():
     with get_db_connection() as conn:
@@ -502,7 +527,7 @@ def setup():
 
 if __name__ == '__main__':
     setup()
-    app.run(debug=True) 
+    app.run(debug=True)
 
 
 
